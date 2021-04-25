@@ -1,0 +1,15 @@
+[package]
+name = "rf"
+version = "0.1.0"
+authors = ["lyiriyah <oscar.wittamsnangle@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+whoami = "^1.0.0"
+passwd = "^0.0.1"
+colored = "^2.0.0"
+raw-cpuid = "^9.0.0"
+regex = "^1.0.0"
+sys-info = "^0.9"

@@ -55,7 +55,7 @@ fn get_shell() -> String {
     return shell;
 }
 
-fn get_meminfo() -> MemInfo {
+fn get_meminfo() -> sys_info::MemInfo {
     return match sys_info::mem_info() {
         Ok(meminfo) => meminfo,
         Err(e) => std::panic!("Failed to get memory info with error {}", e)

@@ -5,3 +5,7 @@ Horribly written fetch in Rust.
 
 Clone and run `cargo install --path .` to compile and install rf.
 Make sure to have `$HOME/.cargo/bin` in your path (or install to another directory with `cargo install --path . --root <install-dir>`).
+
+## TODO
+- [ ] Segment out getting information into functions
+- [ ] Put onto crates.io

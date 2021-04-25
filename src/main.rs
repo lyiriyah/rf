@@ -38,10 +38,10 @@ fn get_editor() -> String {
     return editor;
 }
 
-fn get_shell() -> String {
+fn get_shell(username: &str) -> String {
     let mut shell = String::new();
 
-    match Passwd::from_name(&username) {
+    match Passwd::from_name(username) {
         Some(user) => match Path::new(&user.shell).file_name() {
             Some(basename) => match basename.to_str() {
                 Some(basestr) => shell = basestr.to_string(),
@@ -68,7 +68,7 @@ fn main() {
 
     let cpuinfo = get_cpu_info();
     let editor = get_editor();
-    let shell = get_shell();
+    let shell = get_shell(&username);
     let meminfo = get_meminfo();
 
     let mut topline = String::from("");

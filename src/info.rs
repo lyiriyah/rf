@@ -5,15 +5,43 @@ use passwd::Passwd;
 use regex::Regex;
 use sys_info;
 
+pub struct Info {
+    pub username: String,
+    pub hostname: String,
+    pub cpu_name: String,
+    pub editor: String,
+    pub shell: String,
+    pub memory: sys_info::MemInfo,
+}
+
+impl Info {
+    pub fn new(
+        username: String,
+        hostname: String,
+        cpu_name: String,
+        editor: String,
+        shell: String,
+        memory: sys_info::MemInfo) -> Info {
+        Info {
+            username: username,
+            hostname: hostname,
+            cpu_name: cpu_name,
+            editor: editor,
+            shell: shell,
+            memory: memory
+        }
+    }
+}
+
 pub fn get_cpu_info() -> String {
     let re = Regex::new(" +").unwrap();
     let cpuid = raw_cpuid::CpuId::new();
     let cpuextinf = cpuid.get_extended_function_info();
     
     return re.replace_all(cpuextinf.as_ref().map_or_else(
-            || "n/a",
-            |extfuninfo| extfuninfo.processor_brand_string().unwrap_or("unreadable"),
-        ), " ").to_string();
+        || "n/a",
+        |extfuninfo| extfuninfo.processor_brand_string().unwrap_or("unreadable"),
+    ), " ").to_string();
 }
 
 pub fn get_editor() -> String {
@@ -56,6 +84,6 @@ pub fn get_shell(username: &str) -> String {
 pub fn get_meminfo() -> sys_info::MemInfo {
     return match sys_info::mem_info() {
         Ok(meminfo) => meminfo,
-        Err(e) => std::panic!("Failed to get memory info with error {}", e)
+        Err(e) => panic!("Failed to get memory info with error {}", e)
     };
 }

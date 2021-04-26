@@ -8,4 +8,4 @@ Make sure to have `$HOME/.cargo/bin` in your path (or install to another directo
 
 ## Todo
 - [x] Segment out getting information into functions
-- [ ] Put onto crates.io
+- [x] Put onto crates.io

@@ -3,7 +3,7 @@ Horribly written fetch in Rust.
 
 ## Installation
 
-### From crates.io
+### From [crates.io](https://crates.io/crates/rf-fetch)
 `cargo install rf-fetch`
 
 ### From this repository

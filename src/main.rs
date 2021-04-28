@@ -2,8 +2,10 @@ mod info;
 mod pprinter;
 
 fn main() {
-    let hostname = whoami::hostname();
-    let username = whoami::username();
+    let mut hostname = whoami::hostname();
+    let mut username = whoami::username();
+    hostname.truncate(15);
+    username.truncate(15);
     let cpuinfo = info::get_cpu();
     let editor = info::get_editor();
     let shell = info::get_shell(&username);

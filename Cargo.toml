@@ -1,8 +1,16 @@
 [package]
-name = "rf"
-version = "0.1.0"
-authors = ["lyiriyah <oscar.wittamsnangle@gmail.com>"]
+name = "rf-fetch"
+version = "1.0.0"
+authors = ["lyiriyah"]
 edition = "2018"
+description = "Horribly written fetch"
+license-file = "LICENSE"
+homepage = "https://github.com/lyiriyah/rf"
+repository = "https://github.com/lyiriyah/rf"
+readme = "README.md"
+keywords = ["fetch"]
+categories = ["command-line-utilities"]
+include = ["src/**/*.rs", "/Cargo.toml", "README.md", "LICENSE"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

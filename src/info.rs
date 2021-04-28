@@ -1,9 +1,7 @@
-use raw_cpuid;
 use std::env;
 use std::path::Path;
 use passwd::Passwd;
 use regex::Regex;
-use sys_info;
 
 pub struct Info {
     pub username: String,
@@ -23,67 +21,70 @@ impl Info {
         shell: String,
         memory: sys_info::MemInfo) -> Info {
         Info {
-            username: username,
-            hostname: hostname,
-            cpu_name: cpu_name,
-            editor: editor,
-            shell: shell,
-            memory: memory
+            username,
+            hostname,
+            cpu_name,
+            editor,
+            shell,
+            memory,
         }
     }
 }
 
-pub fn get_cpu_info() -> String {
+pub fn get_cpu() -> String {
     let re = Regex::new(" +").unwrap();
     let cpuid = raw_cpuid::CpuId::new();
     let cpuextinf = cpuid.get_extended_function_info();
     
-    return re.replace_all(cpuextinf.as_ref().map_or_else(
+    re.replace_all(cpuextinf.as_ref().map_or_else(
         || "n/a",
         |extfuninfo| extfuninfo.processor_brand_string().unwrap_or("unreadable"),
-    ), " ").to_string();
+    ), " ").trim().to_string()
 }
 
 pub fn get_editor() -> String {
     let mut editor = String::from("");
-    let mut editorpath = String::new();
-    
-    match env::var("EDITOR") {
-        Ok(path) => editorpath = path,
-        Err(e) => println!("Failed to get editor with error {}", e)
+ 
+    if let Ok(path) = env::var("EDITOR") {
+        if let Some(basename) = Path::new(&path).file_name() {
+           if let Some(editorname) = basename.to_str() {
+               editor = editorname.to_string();
+           } else {
+               println!("Could not cast basename to a String");
+           };
+        } else {
+           println!("Could not get basename of editor {}", editor);
+        }
+    } else if let Err(e) = env::var("EDITOR") {
+        println!("Failed to get editor with error {}", e);
     }
-
-    match Path::new(&editorpath).file_name() {
-        Some(path) => match path.to_str() {
-            Some(basename) => editor = basename.to_string(),
-            None => println!("Failed to convert the basename of {} to a &str", editorpath)
-        },
-        None => println!("Could not get basename of editor {}", editor)
-    }
-
-    return editor;
+ 
+    editor
 }
 
 pub fn get_shell(username: &str) -> String {
     let mut shell = String::new();
 
-    match Passwd::from_name(username) {
-        Some(user) => match Path::new(&user.shell).file_name() {
-            Some(basename) => match basename.to_str() {
-                Some(basestr) => shell = basestr.to_string(),
-                None => println!("Failed to convert the basename of {} to a &str", user.shell)
-            },
-            None => println!("Failed to get path of shell {}", user.shell) 
-        },
-        None => println!("Failed to get shell for user {}", username)
+    if let Some(user) = Passwd::from_name(username) {
+        if let Some(basename) = Path::new(&user.shell).file_name() {
+            if let Some(shellname) = basename.to_str() {
+                shell = shellname.to_string();
+            } else {
+                println!("Could not cast basename to a String");
+            }
+        } else {
+            println!("Failed to get path of shell {}", user.shell);
+        }
+    } else {
+        println!("Failed to get shell for user {}", username)
     }
-
-    return shell;
+    
+    shell
 }
 
 pub fn get_meminfo() -> sys_info::MemInfo {
-    return match sys_info::mem_info() {
+    match sys_info::mem_info() {
         Ok(meminfo) => meminfo,
         Err(e) => panic!("Failed to get memory info with error {}", e)
-    };
+    }
 }

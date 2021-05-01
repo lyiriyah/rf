@@ -14,6 +14,9 @@ include = ["src/**/*.rs", "/Cargo.toml", "README.md", "LICENSE"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[[bin]]
+name = "rf"
+
 [dependencies]
 whoami = "^1.0.0"
 passwd = "^0.0.1"
